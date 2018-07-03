@@ -1,0 +1,47 @@
+package ExamenLauraFicheros;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class GestionEmpleados extends DefaultHandler {
+
+	private PrintWriter escribir;
+	private String contenido = "";
+
+	public GestionEmpleados() throws IOException {
+		super();
+
+		escribir = new PrintWriter("EmpleadosBinario.dat");
+	}
+
+	public void startDocument() throws SAXException {
+		System.out.println("Parseando contenido de \"Empleados.xml\" a \"EmpleadosBinario.dat\"");
+	}
+
+	public void endDocument() throws SAXException {
+		System.out.println("fichero \"Empleados.xml\" creado con el contenido de \"EmpleadosBinario.dat\"");
+		escribir.close();
+	}
+
+	public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
+		if (!localName.equals("Empleados") && !localName.equals("Empleado"))
+			escribir.print(localName + ": ");
+	}
+
+	public void endElement(String uri, String localName, String name) throws SAXException {
+		if (localName.equals("Empleado"))
+			escribir.println();
+	}
+
+	public void characters(char[] ch, int inicio, int longitud) throws SAXException {
+		contenido = new String(ch, inicio, longitud);
+		contenido = contenido.replaceAll("[\t\n ]", "");
+		if (!contenido.equals("")) {
+			contenido += ", ";
+			escribir.print(contenido);
+		}
+	}
+}

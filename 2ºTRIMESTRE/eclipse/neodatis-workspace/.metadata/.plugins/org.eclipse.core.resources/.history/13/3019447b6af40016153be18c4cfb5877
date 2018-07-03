@@ -1,0 +1,76 @@
+package ObjetosBDD;
+
+public class Venta {
+
+	private int codventa;
+	private Articulo codarti;
+	private Cliente numclie;
+	private int univen;
+	private String fecha;
+	
+	public void setCodarti(Articulo codarti) {
+		this.codarti = codarti;
+	}
+	
+	public void setCodventa(int codventa) {
+		this.codventa = codventa;
+	}
+	
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+	
+	public void setNumclie(Cliente numclie) {
+		this.numclie = numclie;
+	}
+	
+	public void setUniven(int univen) {
+		this.univen = univen;
+	}
+	
+	public Articulo getCodarti() {
+		return codarti;
+	}
+	
+	public int getCodventa() {
+		return codventa;
+	}
+	
+	public String getFecha() {
+		return fecha;
+	}
+	
+	public Cliente getNumclie() {
+		return numclie;
+	}
+	
+	public int getUniven() {
+		return univen;
+	}
+	
+    public String getStringTypeT_Venta(){
+        return String.format("('%s', '%s', %s, '%s', %s)", codventa, codarti.getStringTypeT_Articulo(), numclie.getStringTypeT_Cliente(), univen, fecha);
+    }
+    
+	public static Cliente newInstance(String cadArticulo){
+		
+		String aux[];
+		cadArticulo = cadArticulo.replaceAll("\"", "");
+		cadArticulo = cadArticulo.replaceAll("\\)", "");
+		cadArticulo = cadArticulo.replaceAll("\\(", "");
+        aux = cadArticulo.split(",");
+
+        return new Cliente(0, "", "");
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Articulo{"
+				+ "codventa='"+codventa+"'"
+				+ "codarti='"+codarti+"'"
+				+ "numclie='"+numclie+"'"
+				+ "univen='"+univen+"'"
+				+ "fecha='"+fecha+"'}";
+	}
+}

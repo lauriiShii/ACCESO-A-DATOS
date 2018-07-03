@@ -1,0 +1,71 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class ExamenEjercicio02 {
+
+	/** @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+		
+		//VARIABLES
+        ResultSet result;
+        final String NOMBRE = "ASIGNATURAS DEL IES SALADILLO";
+        String codigoAnterior = "";
+		String ofertaAnterior = "";
+		String cursoAnterior = "";
+
+        
+        //ABRIMOS CONEXION
+        LibreriaJDBC.abrirConexion();
+        
+        result = LibreriaJDBC.selectEscrito("SELECT a.codAsignatura, a.Nombre, a.HorasSemanales, h.codOe, h.CodCurso, h.CodTramo FROM asignatura a inner join horario h  ON a.CodAsignatura = h.CodAsignatura GROUP BY 1,6;");
+        
+        //CABEZERA
+        ponEstrellas(60);
+        System.out.printf(" %45s \n",NOMBRE);
+        ponEstrellas(60);
+
+        //MOSTRAR DATOS
+		while (result.next()) {
+			//UNA ASIGNATURA DIFERENTE A LA ANTERIOR
+			if (!result.getString(1).equals(codigoAnterior)) {
+
+				codigoAnterior = result.getString(1);
+				ofertaAnterior = result.getString(4);
+				cursoAnterior = result.getString(5);
+				System.out.printf("\nCodigo: %s\tNombre: %s\tHoras Semanales: %d\n\tCodigo curso: %s %s\tTramos horarios: %s",result.getString(1), result.getString(2), result.getInt(3), result.getString(4),result.getString(5), result.getString(6));
+
+			}
+			//SI ES LA MISMA HAY QUE ACUMULAR EL TRAMO
+			else if (result.getString(1).equals(codigoAnterior) && !(result.getString(4).equals(ofertaAnterior) && result.getString(5).equals(cursoAnterior))) {
+
+				ofertaAnterior = result.getString(4);
+				cursoAnterior = result.getString(5);
+				System.out.printf("\n\tCodigo curso: %s %s\tTramos horarios: %s", result.getString(4),result.getString(5), result.getString(6));
+			}
+			
+			//SI SOLO TIENE UN TRAMO LO MOSTRAMOS
+			else
+
+				System.out.printf(", %s", result.getString(6));
+
+		}
+
+		System.out.println("\n");
+        //CERRAMOS CONEXION
+        LibreriaJDBC.cerrarConexion();
+
+	}
+	
+	public static void ponEstrellas (int num){
+        int i;
+        
+        for(i = 0; i <= num; i++){
+        	if(i == num)
+        		System.out.println("*");
+        	else
+        		System.out.print("*");
+        }
+	}
+
+}

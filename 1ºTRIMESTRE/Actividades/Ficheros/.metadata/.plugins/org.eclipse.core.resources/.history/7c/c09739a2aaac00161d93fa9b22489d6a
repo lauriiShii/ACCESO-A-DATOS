@@ -1,0 +1,103 @@
+package ExamenLauraFicheros;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.PrintWriter;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import com.thoughtworks.xstream.core.util.CustomObjectOutputStream;
+import com.thoughtworks.xstream.core.util.CustomObjectOutputStream.StreamCallback;
+
+public class GestionEmpleados extends DefaultHandler {
+
+	Empleado e;
+	CustomObjectOutputStream escritor;
+	int atributo = -1;
+
+	public GestionEmpleados() throws FileNotFoundException, IOException {
+		super();
+		e = new Empleado();
+		escritor = new CustomObjectOutputStream((StreamCallback) new FileOutputStream(new File("EmpleadoBinario.dat")));
+
+	}
+
+	public void startDocument() {
+		System.out.println("Parseando contenido de \"ContactosConAtributos.xml\" a \"ContactosConAtributos.txt\"");
+
+	}
+
+	public void endDocument() {
+		
+		System.out.println("fichero \"ContactosConAtributos.txt\" creado con el contenido de \"ContactosConAtributos.xml\"");
+	}
+
+	public void startElement(String uri, String nombre, String nombreC, Attributes atts) {
+		System.out.printf("Elemento %s\n", nombre);
+
+		switch (nombre) {
+		case "id":
+			atributo = 1;
+			break;
+
+		case "nombre":
+			atributo = 2;
+			break;
+
+		case "edad":
+			atributo = 3;
+			break;
+
+		case "salario":
+			atributo = 4;
+			break;
+
+		default:
+			atributo = 0;
+			break;
+		}
+
+	}
+
+	public void endElement(String uri, String nombre, String nombreC) {
+		System.out.printf("Fin Elemento %s\n", nombre);
+		atributo = 0;
+	}
+
+	public void characters(char[] ch, int inicio, int longitud) throws SAXException {
+		String car = new String(ch, inicio, longitud);
+		car = car.replaceAll("[\t\n]", "");
+		System.out.printf("\tCaracteres: %s\n", car);
+
+		switch (atributo) {
+		case 1:
+			e.id = car;
+			break;
+
+		case 2:
+			e.nombre = car;
+			break;
+
+		case 3:
+			e.edad = Integer.parseInt(car);
+			break;
+
+		case 4:
+			e.salario = Float.parseFloat(car);
+
+			try {
+				escritor.writeObject(e);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			e = new EmpleadoSerializado();
+
+			break;
+		}
+	}
+}

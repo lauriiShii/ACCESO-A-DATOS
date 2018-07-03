@@ -1,0 +1,50 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class ExamenEjercicio02 {
+
+	/** @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+		
+		//VARIABLES
+        ResultSet result;
+        final String NOMBRE = "ASIGNATURAS DEL IES SALADILLO";
+        String resultado = "";
+
+        
+        //ABRIMOS CONEXION
+        LibreriaJDBC.abrirConexion();
+        
+        result = LibreriaJDBC.selectEscrito("SELECT a.codAsignatura, a.Nombre, a.HorasSemanales, h.codOe, h.CodCurso, h.CodTramo FROM asignatura a inner join horario h  ON a.CodAsignatura = h.CodAsignatura GROUP BY 1,6;");
+        
+        //CABEZERA
+        ponEstrellas(60);
+        System.out.printf(" %45s \n",NOMBRE);
+        ponEstrellas(60);
+
+
+        while (result.next()) {
+        	if(!resultado.equals(resultado))
+            	resultado = String.format("Codigo: %s Nombre: %s: Horas semanales: %s%n\t Codigo curso: %s %s Tramo horario:%n", result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5));
+            
+        }
+
+        
+        //CERRAMOS CONEXION
+        LibreriaJDBC.cerrarConexion();
+
+	}
+	
+	public static void ponEstrellas (int num){
+        int i;
+        
+        for(i = 0; i <= num; i++){
+        	if(i == num)
+        		System.out.println("*");
+        	else
+        		System.out.print("*");
+        }
+	}
+
+}

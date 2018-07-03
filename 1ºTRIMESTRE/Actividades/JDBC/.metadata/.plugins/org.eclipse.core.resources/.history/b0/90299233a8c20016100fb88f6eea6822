@@ -1,0 +1,50 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class ExamenEjercicio01 {
+
+	/** @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+		
+		//VARIABLES
+		final String NO_TUTOR = "[No es tutor]";
+        ResultSet result;
+        
+        //ABRIMOS CONEXION
+        LibreriaJDBC.abrirConexion();
+        
+        result = LibreriaJDBC.selectEscrito("SELECT p.nombre, p.apellidos, o.Nombre , c.CodOe, c.CodCurso,count(r.CodAsignatura) "
+        		+ "FROM curso c inner JOIN ofertaeducativa  o ON  c.CodOe = o.CodOe  "
+        		+ "right JOIN profesor p ON p.codProf = c.Tutor "
+        		+ "inner JOIN reparto r ON  p.CodProf = r.CodProf GROUP BY 1;");
+
+        while (result.next()) {
+        	// MOSTRAMOS LOS DATOS
+            System.out.printf("[Nombre: %s] [Apellidos: %s] ", result.getString(1), result.getString(2));
+            
+            //SI NO ES PROFESOR LO INDICAMOS
+            if (result.getString(3) == null)
+                System.out.println(NO_TUTOR);
+            
+            if (result.getString(4) == null)
+                System.out.println(NO_TUTOR);
+            
+            if (result.getString(5) == null)
+                System.out.println(NO_TUTOR);
+            
+            //SI ES PROFESOR MOSTRAMOS LOS DATOS DE LA TABLA CURSO TAMBIEN
+            else
+                System.out.printf("[Nombre oferta: %s] [Clave curso: %s-%s]", result.getString(3), result.getString(4), result.getString(5));
+            
+            //SIEMPRE SE MUESTRA
+            System.out.printf("[Num asignaturas %s]%n", result.getString(6));
+        }
+
+        
+        //CERRAMOS CONEXION
+        LibreriaJDBC.cerrarConexion();
+
+	}
+
+}

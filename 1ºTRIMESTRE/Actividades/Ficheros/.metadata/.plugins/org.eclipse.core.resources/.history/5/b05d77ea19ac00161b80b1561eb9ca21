@@ -1,0 +1,48 @@
+package Ejercicio010;
+
+
+import java.io.*;
+
+import com.thoughtworks.xstream.XStream;
+import Ejercicio008SinSerializar.Contacto;
+
+/**A partir de los datos del fichero binario de la agenda telefónica, crea un fichero XML
+usando la librería XStream.**/
+
+public class Ejercicio010 {
+
+    public static void main(String[] args) throws IOException {
+
+    	//DECLARAMOS VARIABLES Y OBJETOS
+        File fichero = new File("binarioNoSerializable.dat");
+        ListaContactos lista = new ListaContactos();
+        FileInputStream fileIn;
+        DataInputStream lectorContacto;
+        Contacto contacto;
+        XStream xstream = new XStream();
+
+            fileIn = new FileInputStream(fichero);
+            lectorContacto = new DataInputStream(fileIn);
+
+            try {
+                while (true) {
+                    contacto = new Contacto(lectorContacto.readUTF(), lectorContacto.readUTF(),lectorContacto.readUTF(), lectorContacto.readInt(), lectorContacto.readBoolean(), lectorContacto.readFloat());
+                    lista.agregarContacto(contacto);
+                }
+
+            } catch (EOFException e) {
+
+            }
+            
+            lectorContacto.close();
+
+            xstream.alias("Contactos", ListaContactos.class);
+            xstream.alias("Contacto", Contacto.class);
+            xstream.addImplicitCollection(ListaContactos.class, "lista");
+            xstream.toXML(lista, new FileOutputStream("ContactosNoSerializable.xml"));
+
+            fileIn.close();
+
+    }
+
+}

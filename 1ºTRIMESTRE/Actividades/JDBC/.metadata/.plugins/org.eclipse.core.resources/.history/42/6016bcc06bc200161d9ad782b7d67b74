@@ -1,0 +1,310 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.mysql.jdbc.DatabaseMetaData;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+public class LibreriaJDBC {
+
+	static Connection conexion;
+
+	// INICIA LA CONEXION CON LA BASE DE DATOS
+	public static void abrirConexion() {
+		try {
+			// Carga driver
+			Class.forName("com.mysql.jdbc.Driver");
+
+			// Conectamos a la BDD
+			conexion = DriverManager.getConnection("jdbc:mysql://localhost/horario?useServerPrepStmts=true", "root",
+					"root");
+			System.out.println("conexion a la base de datos establecida con exito :)\n");
+
+		} catch (SQLException | ClassNotFoundException e) {
+			System.out.println("conexion a la base de datos fallida :(");
+		}
+	}
+
+	// CIERRA LA CONEXION CON LA BASE DE DATOS
+	public static void cerrarConexion() throws SQLException {
+		// Cerramos conexion
+		conexion.close();
+		System.out.println("\nConexion cerrada");
+
+	}
+
+	// MUESTRA TODA LA INFORMACION REFERENTE A UNA TABLA
+	public static void dameInformacionTabla(String nomTabla) throws SQLException {
+
+		// Obtenemos información de la BDD
+		DatabaseMetaData datos = (DatabaseMetaData) conexion.getMetaData();
+		ResultSet result = datos.getTables(null, null, null, null);
+		result = datos.getColumns(null, null, nomTabla, null);
+
+		// Mostramos información de las columnas
+		System.out.println("INFO COLUMNAS TABLA " + nomTabla);
+		while (result.next()) {
+			System.out.printf("- Nombre columna: %s\n", result.getString("COLUMN_NAME"));
+			System.out.printf("- Tipo: %s\n", result.getString("TYPE_NAME"));
+			System.out.printf("- Tamañio: %s\n", result.getString("COLUMN_SIZE"));
+			System.out.printf("- Nula: %s\n\n", result.getString("IS_NULLABLE"));
+		}
+
+		// Mostramos informacion de las Claves primarias
+		System.out.println();
+		System.out.println("INFO PRIMARY KEYS TABLA " + nomTabla);
+		result = datos.getPrimaryKeys(null, null, nomTabla);
+		while (result.next()) {
+			System.out.println("- " + result.getString("COLUMN_NAME"));
+		}
+
+		// Mostramos información sobre las columnas de clave externa que hacen
+		// referencia a las columnas de clave principal de nuestra tabla
+		System.out.println();
+		System.out.println("INFO CLAVES AJENAS QUE USAN LAS PK DE LA TABLA " + nomTabla);
+		result = datos.getExportedKeys(null, null, nomTabla);
+		while (result.next()) {
+			System.out.printf("- Tabla FK: %s, Clave primaria: %s\n", result.getString("FKTABLE_NAME"),
+					result.getString("FKCOLUMN_NAME"));
+		}
+
+		// Mostramos informacion sobre las claves ajenas que usa nuestra tabla
+		// (claves primarias de otras tablas)
+		System.out.println();
+		System.out.println("INFO CLAVES AJENAS QUE USAN LA TABLA " + nomTabla);
+		result = datos.getImportedKeys(null, null, nomTabla);
+		while (result.next()) {
+			System.out.printf("- Tabla FK: %s, Clave primaria: %s\n", result.getString("FKTABLE_NAME"),
+					result.getString("FKCOLUMN_NAME"));
+		}
+
+		result.close();
+	}
+
+	// MUESTRA TODO EL CONTENIDO DE UNA TABLA
+	public static void dameContenidoBDD() throws SQLException {
+
+		// Obtenemos información de la base de datos
+		DatabaseMetaData datos = (DatabaseMetaData) conexion.getMetaData();
+		ResultSet result = datos.getTables(null, null, null, null);
+		String catalogo, esquema, tabla, tipo, nombreCol, tamanioCol, tipoCol;
+
+		// Mostramos la informacion de la BDD
+		System.out.println("INFORMACIÓN DE LA BDD:");
+		while (result.next()) {
+			catalogo = result.getString(1);
+			esquema = result.getString(2);
+			tabla = result.getString(3);
+			tipo = result.getString(4);
+			System.out.printf("- Tipo: %s, Catálogo: %s, Esquema: %s, Tabla: %s\n", tipo, catalogo, esquema, tabla);
+		}
+
+		// Muestra la informacion de todas las tablas
+		System.out.println();
+		System.out.println("\nINFORMACIÓN DE LAS TABLAS:");
+		result = datos.getColumns(null, null, null, null);
+		while (result.next()) {
+			tabla = (result.getString(3)).toUpperCase();
+			nombreCol = result.getString("COLUMN_NAME");
+			tipoCol = result.getString("TYPE_NAME");
+			tamanioCol = result.getString("COLUMN_SIZE");
+			System.out.printf("- Tabla: %s, NombreCol: %s, TipoCol: %s, TamanioCol: %s\n", tabla, nombreCol, tipoCol,
+					tamanioCol);
+		}
+
+		result.close();
+	}
+	
+	//MUESTRA TODOS LOS DATOS DE UNA TABLA
+	public static void dameDatos (String nomTabla) throws SQLException {
+		
+		// Obtenemos información de la base de datos
+		DatabaseMetaData datos = (DatabaseMetaData) conexion.getMetaData();
+		ResultSet result = datos.getTables(null, null, null, null);
+		String tabla, nombreCol, tamanioCol, tipoCol;
+		result = datos.getColumns(null, null, nomTabla, null);
+				
+		while (result.next()) {
+			tabla = (result.getString(3)).toUpperCase();
+			nombreCol = result.getString("COLUMN_NAME");
+			tipoCol = result.getString("TYPE_NAME");
+			tamanioCol = result.getString("COLUMN_SIZE");
+			System.out.printf("- Tabla: %s, NombreCol: %s, TipoCol: %s, TamanioCol: %s\n", tabla, nombreCol, tipoCol,
+					tamanioCol);
+		}
+		result.close();
+	}
+	
+	// INSERT DE CINCO DATOS
+	public static void insertPreparadoCincoDatos(String nomTabla, String dato1, String dato2, String dato3, String dato4, String dato5) throws SQLException {
+
+		String insert = "insert into "+nomTabla+" values (?, ?, ?, ?, ?)";
+		PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(insert);
+		sentencia.setString(1, dato1);
+		sentencia.setString(2, dato2);
+		sentencia.setString(3, dato3);
+		sentencia.setString(4, dato4);
+		sentencia.setString(5, dato5);
+		System.out.println(sentencia.executeUpdate());
+		sentencia.close();
+	}
+	
+	// INSERT DE CUATRO DATOS
+	public static void insertPreparadoCuatroDatos(String nomTabla, String dato1, String dato2, String dato3, String dato4) throws SQLException {
+
+		String insert = "insert into "+nomTabla+" values (?, ?, ?, ?)";
+		PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(insert);
+		sentencia.setString(1, dato1);
+		sentencia.setString(2, dato2);
+		sentencia.setString(3, dato3);
+		sentencia.setString(4, dato4);	
+		System.out.println(sentencia.executeUpdate());
+		sentencia.close();
+	}
+	
+	// INSERT DE TRES DATOS
+	public static void insertPreparadoTresDatos(String nomTabla, String dato1, String dato2, String dato3) throws SQLException {
+
+		String insert = "insert into "+nomTabla+" values (?, ?, ?)";
+		PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(insert);
+		sentencia.setString(1, dato1);
+		sentencia.setString(2, dato2);
+		sentencia.setString(3, dato3);
+		System.out.println(sentencia.executeUpdate());
+		sentencia.close();
+	}
+	
+	//SELECT PASANDO LA SENTENCIA
+    public static ResultSet selectEscrito(String select) {
+        ResultSet result = null;
+        Statement sentencia;
+        try {
+            sentencia = (Statement) conexion.createStatement();
+            result = sentencia.executeQuery(select);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    
+  //SELECT PASANDO LA SENTENCIA
+    public static void mostrarSelectEscrito (String select) throws SQLException{
+     Statement sentencia = (Statement) conexion.createStatement();
+     String sql = select;
+     System.out.println(sentencia.executeQuery(sql));
+     sentencia.close();
+    }
+	
+	//UPDATE, DELETE O INSERT PASANDO LA SENTENCIA
+	public static void actualizarEscrito (String select) throws SQLException{
+		Statement sentencia = (Statement) conexion.createStatement();
+		String sql = select;
+		System.out.println(sentencia.executeUpdate(sql));
+		sentencia.close();
+	}
+	
+	//MOSTRAR CONTENIDO DE UNA TABLA CON UNA SELECT ESCRITA DE 4 DATOS
+	public static void selectEscritaMostrarCuatroDatos (String select) throws SQLException{
+		ResultSet result;
+		PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(select);
+		result = sentencia.executeQuery();
+		while (result.next()){
+			System.out.printf("%-60s | %-5s | %-5s | %s\n",result.getString(1), result.getString(2), result.getString(3), result.getString(4));
+		}
+		System.out.println();
+		sentencia.close();
+		result.close();
+	}
+	
+	//MOSTRAR CONTENIDO DE UNA TABLA CON UNA SELECT ESCRITA DE 4 DATOS
+	public static void selectEscritaMostrarCincoDatos (String select) throws SQLException{
+		ResultSet result;
+		PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(select);
+		result = sentencia.executeQuery();
+		while (result.next()){
+			System.out.printf("%-20s | %-20s | %-20s | %s | %-20s \n",result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5));
+		}
+		System.out.println();
+		sentencia.close();
+		result.close();
+	}
+	
+	//MOSTRAR CONTENIDO DE UNA TABLA CON UNA SELECT ESCRITA DE 4 DATOS
+	public static void selectEscritaMostrarDosDatos (String select) throws SQLException{
+		ResultSet result;
+		PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(select);
+		result = sentencia.executeQuery();
+		while (result.next()){
+			System.out.printf("%-20s | %-20s \n",result.getString(1), result.getString(2));
+		}
+		System.out.println();
+		sentencia.close();
+		result.close();
+	}
+	
+	//CUANDO SE IMPARTE UNA ASIGNATURA EN UN CURSO
+	public static void dimeCuandoAsignatura (String asignatura, String curso, String oe) throws SQLException{
+        ResultSet result;
+        PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(String.format("SELECT * FROM horario WHERE CodAsignatura = '%s' AND CodCurso = '%s' AND CodOe = '%s';", asignatura, curso, oe));
+        result = sentencia.executeQuery();
+        while (result.next())
+             System.out.printf("CodTramo: %s | CodOe: %s | CodCurso: %s |CodAsignatura: %s%n", result.getString(1), result.getString(2), result.getString(3) ,result.getString(4));
+	}
+	
+	//MOSTRAR ASIGNATURA QUE IMPARTE UN PROFESOR
+	public static void dimeQueAsignatura (String prof) throws SQLException{
+        ResultSet result;
+        PreparedStatement sentencia = (PreparedStatement) conexion.prepareStatement(String.format("SELECT CodAsignatura FROM reparto WHERE CodProf = '%s';", prof));
+        result = sentencia.executeQuery();
+        while (result.next())
+             System.out.printf("Asignatura: %s%n", result.getString(1));
+	}
+	
+	//MOSTRAR HORARIO DE UN CURSO
+	public static void dameHorarioCurso (String codOe, String codCurso, boolean desdoble) throws SQLException{
+		int cont = 1;
+		PreparedStatement sentencia; 
+		ResultSet result;
+		
+		System.out.println();
+		if(desdoble)
+			sentencia = (PreparedStatement) conexion.prepareStatement("select CodAsignatura from horario where codOe = ? and CodCurso = ? and CodAsignatura in "
+				+ "(select CodAsignatura from horario h1 where CodAsignatura like '@%' and codTramo in (Select CodTramo from horario h2 where h1.codtramo = h2.codtramo))"
+				+ " order by substring(codTramo, 2), substring(codTramo, 1) like 'L%' desc, substring(codTramo, 1) like 'M%' desc, substring(codTramo, 1) like 'X%' desc, "
+				+ "substring(codTramo, 1) like 'J%' desc;");
+		else 
+			sentencia = (PreparedStatement) conexion.prepareStatement("select CodAsignatura from horario where codOe = ? and CodCurso = ? and CodAsignatura not in "
+				+ "(select CodAsignatura from horario h1 where CodAsignatura like '@%' and codTramo in (Select CodTramo from horario h2 where h1.codtramo = h2.codtramo))"
+				+ " order by substring(codTramo, 2), substring(codTramo, 1) like 'L%' desc, substring(codTramo, 1) like 'M%' desc, substring(codTramo, 1) like 'X%' desc, "
+				+ "substring(codTramo, 1) like 'J%' desc;");
+		
+		sentencia.setString(1, codOe);
+		sentencia.setString(2, codCurso);
+		result = sentencia.executeQuery();
+		
+		while (result.next()){
+			
+			if (cont <= 5){
+				if (result.getString(1).matches("@.+"))
+					System.out.printf("%6s%-9s* |", "", result.getString(1));
+				else 
+					System.out.printf("%6s%-9s  |", "", result.getString(1));
+			}
+			else {
+				if (result.getString(1).matches("@.+"))
+					System.out.printf("\n%6s%-9s* |", "", result.getString(1));
+				else
+					System.out.printf("\n%6s%-9s  |", "", result.getString(1));
+				cont = 1;
+			}
+			cont ++;
+		}
+		result.close();
+		sentencia.close();
+		result.close();
+	}
+	
+}

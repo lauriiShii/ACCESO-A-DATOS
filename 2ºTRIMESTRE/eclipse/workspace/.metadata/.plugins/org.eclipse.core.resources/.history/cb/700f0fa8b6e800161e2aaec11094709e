@@ -1,0 +1,22 @@
+package Ejercicio11;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import datos.SessionFactoryUtil;
+
+public class Main {
+
+	public static void main(String[] args) {
+		SessionFactory sesionFactory = SessionFactoryUtil.getSessionFactory();
+		Session session = sesionFactory.openSession();
+		final String HQL = "SELECT OfertaEducativa LEFT JOIN Curso";
+		
+		
+		
+		session.close();
+		System.exit(0);
+
+	}
+
+}

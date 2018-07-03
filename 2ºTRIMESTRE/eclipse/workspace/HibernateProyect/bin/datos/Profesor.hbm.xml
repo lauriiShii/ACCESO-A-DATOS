@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-ene-2017 18:04:01 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="datos.Profesor" table="profesor" catalog="horario">
+        <id name="codProf" type="string">
+            <column name="CodProf" length="3" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="Nombre" length="20" />
+        </property>
+        <property name="apellidos" type="string">
+            <column name="Apellidos" length="40" />
+        </property>
+        <property name="fechaAlta" type="timestamp">
+            <column name="FechaAlta" length="19" not-null="true" />
+        </property>
+        <set name="repartos" table="reparto" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CodProf" length="3" />
+            </key>
+            <one-to-many class="datos.Reparto" />
+        </set>
+        <set name="cursos" table="curso" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="Tutor" length="3" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="datos.Curso" />
+        </set>
+    </class>
+</hibernate-mapping>

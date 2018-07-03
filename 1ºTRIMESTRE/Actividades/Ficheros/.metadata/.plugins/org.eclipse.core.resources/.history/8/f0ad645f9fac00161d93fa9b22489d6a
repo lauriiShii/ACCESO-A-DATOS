@@ -1,0 +1,21 @@
+package ExamenLauraFicheros;
+
+import java.io.IOException;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+public class Ejercicio02 {
+	public static void main(String[] args) throws IOException, SAXException {
+
+		XMLReader procesadorXML;
+		GestionEmpleados gestor;
+		
+		procesadorXML = XMLReaderFactory.createXMLReader();
+		gestor = new GestionEmpleados();
+		procesadorXML.setContentHandler(gestor);
+		procesadorXML.parse("Empleados.xml");
+
+	}
+}

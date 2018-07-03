@@ -1,0 +1,103 @@
+package ExamenLauraFicheros;
+
+import java.io.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+
+public class GestionEmpleados extends DefaultHandler {
+
+	Empleado empleado;
+	ObjectOutput escritor;
+	int atributo = -1;
+
+
+	public GestionEmpleados() throws FileNotFoundException, IOException {
+		super();
+		empleado = new Empleado();
+		try { 
+
+			escritor = new ObjectOutputStream(new FileOutputStream("EmpleadosBinario.dat"));
+			
+		} catch (FileNotFoundException e) {
+			
+		} catch (IOException e) {
+		
+		} 
+		
+
+	}
+
+	public void startDocument() {
+		System.out.println("Parseando contenido de \"ContactosConAtributos.xml\" a \"ContactosConAtributos.txt\"");
+
+	}
+
+	public void endDocument() {
+		
+		System.out.println("fichero \"ContactosConAtributos.txt\" creado con el contenido de \"ContactosConAtributos.xml\"");
+	}
+
+	public void startElement(String uri, String nombre, String nombreC, Attributes atts) {
+		switch (nombre) {
+		case "id":
+			atributo = 1;
+			break;
+
+		case "nombre":
+			atributo = 2;
+			break;
+
+		case "edad":
+			atributo = 3;
+			break;
+
+		case "salario":
+			atributo = 4;
+			break;
+
+		default:
+			atributo = 0;
+			break;
+		}
+
+	}
+
+	public void endElement(String uri, String nombre, String nombreC) {
+		atributo = 0;
+	}
+
+	public void characters(char[] ch, int inicio, int longitud) throws SAXException {
+		String caracter = new String(ch, inicio, longitud);
+		caracter = caracter.replaceAll("[\t\n]", "");
+
+		switch (atributo) {
+		case 1:
+			empleado.codigo = caracter;
+			break;
+
+		case 2:
+			empleado.nombre = caracter;
+			break;
+
+		case 3:
+			empleado.edad = Integer.parseInt(caracter);
+			break;
+
+		case 4:
+			empleado.salario = Float.parseFloat(caracter);
+
+			try {
+				escritor.writeObject(empleado);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			empleado = new Empleado();
+
+			break;
+		}
+	}
+}

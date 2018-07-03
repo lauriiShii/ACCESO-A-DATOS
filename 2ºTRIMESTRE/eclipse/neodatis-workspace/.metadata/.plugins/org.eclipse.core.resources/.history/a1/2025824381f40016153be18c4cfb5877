@@ -1,0 +1,71 @@
+package BDD;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.Values;
+import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
+
+import ObjetosBDD.*;
+
+public class MainCarlos {
+
+	public static void main(String[] args) {
+
+		ODB odb = ODBFactory.open("VENTAS.dat");
+
+		  Articulo articulo1 = new Articulo(1, "Salchicha peleona", 25, 0.25f);
+		  Articulo articulo2 = new Articulo(2, "Salchicha palida", 25, 0.30f);
+		  Articulo articulo3 = new Articulo(3, "Salchicha cuadrada", 25, 0.26f);
+		  Articulo articulo4 = new Articulo(4, "Salchicha fibrada", 25, 0.27f);
+		  Articulo articulo5 = new Articulo(5, "Salchicha gorda", 25, 0.30f);
+		  Articulo articulo6 = new Articulo(6, "Salchicha larga", 25, 0.32f);
+		  Articulo articulo7 = new Articulo(7, "Salchicha corta", 25, 0.20f);
+
+		  Cliente cliente1 = new Cliente(1, "Dabeef", "Arkham Asylum");
+		  Cliente cliente2 = new Cliente(2, "Karl", "Metropolis");
+		  Cliente cliente3 = new Cliente(3, "Lau", "Gotham");
+
+		  Venta venta1 = new Venta(1, cliente1, articulo1, 20);
+		  Venta venta2 = new Venta(2, cliente1, articulo2, 30);
+		  Venta venta3 = new Venta(3, cliente1, articulo2, 50);
+		  Venta venta4 = new Venta(4, cliente2, articulo4, 10);
+		  Venta venta5 = new Venta(5, cliente3, articulo5, 15);
+
+		  // Almacenamos objetos
+		  odb.store(articulo1);
+		  odb.store(articulo2);
+		  odb.store(articulo3);
+		  odb.store(articulo4);
+		  odb.store(articulo5);
+		  odb.store(articulo6);
+		  odb.store(articulo7);
+		  odb.store(cliente1);
+		  odb.store(cliente2);
+		  odb.store(cliente3);
+		  odb.store(venta1);
+		  odb.store(venta2);
+		  odb.store(venta3);
+		  odb.store(venta4);
+		  odb.store(venta5);
+
+		  // Recuperamos todos los datos
+		  Objects<Articulo> articulos = odb.getObjects(Articulo.class);
+		  Objects<Cliente> clientes = odb.getObjects(Cliente.class);
+		  Objects<Venta> ventas = odb.getObjects(Venta.class);
+
+		  System.out.printf("Articulos: %s\nClientes: %s\nVentas: %s\n", articulos.size(), clientes.size(),ventas.size());
+
+		  // Visualizar los objetos
+		  while (articulos.hasNext())
+		   System.out.println(articulos.next().toString());
+
+		  while (clientes.hasNext())
+		   System.out.println(clientes.next().toString());
+
+		  while (ventas.hasNext())
+		   System.out.println(ventas.next().toString());
+
+		  odb.close();
+		  }
+		  
+	  }

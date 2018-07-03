@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="org.hibernate.SessionFactory"/>
+<fullyQualifiedTypeName name="org.hibernate.Session"/>
+<fullyQualifiedTypeName name="javax.transaction.Transaction"/>
+<fullyQualifiedTypeName name="datos.Historicoprofesores"/>
+<fullyQualifiedTypeName name="datos.SessionFactoryUtil"/>
+<fullyQualifiedTypeName name="datos.Profesor"/>
+<fullyQualifiedTypeName name="org.hibernate.query.Query"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
+<fullyQualifiedTypeName name="datos.Curso"/>
+<fullyQualifiedTypeName name="datos.Ofertaeducativa"/>
+<fullyQualifiedTypeName name="Teclado.Teclado"/>
+</qualifiedTypeNameHistroy>

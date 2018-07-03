@@ -1,0 +1,25 @@
+import java.sql.SQLException;
+
+public class Ejercicio07 {
+
+	/**Mostrar todos los datos de los profesores y de los cursos de los que son tutores. Si no son
+tutores, que aparezca “Este profesor no es tutor” en lugar de los datos del curso.**/
+	
+	/** @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+		//ABRIMOS CONEXION
+		LibreriaJDBC.abrirConexion();
+		
+		//APELLIDOS EN ORDEN ASCENDENTE
+		LibreriaJDBC.selectEscritaMostrarCincoDatos("SELECT p.*, CodOE, CodCurso FROM profesor p, curso WHERE CodProf = tutor");
+		
+		//FECHA ALTA EN EL SISTEMA EN ORDEN DESCENDENTE
+		LibreriaJDBC.selectEscritaMostrarCincoDatos("SELECT * FROM profesor WHERE CodProf NOT IN (SELECT tutor FROM curso)");
+		
+		//CERRAMOS CONEXION
+		LibreriaJDBC.cerrarConexion();	
+
+	}
+
+}

@@ -1,0 +1,23 @@
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+
+public class Ejercicio09 {
+
+	/**Mostrar de todos los cursos el nombre de la oferta educativa, la clave primaria del curso y el
+nombre del tutor.
+
+	 * @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+        
+        //ABRIR CONEXION
+        LibreriaJDBC.abrirConexion();
+
+        LibreriaJDBC.mostrarSelectEscrito("SELECT * FROM profesor LEFT JOIN curso ON CodProf = Tutor;");
+		
+        //CERRAR CONEXION
+        LibreriaJDBC.cerrarConexion();
+	}
+
+}

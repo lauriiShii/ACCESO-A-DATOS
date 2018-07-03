@@ -1,0 +1,77 @@
+package ObjetosBDD;
+
+
+//import org.postgresql.util.PGobject;
+import java.io.Serializable;
+import java.sql.SQLData;
+import java.sql.SQLException;
+import java.sql.SQLInput;
+import java.sql.SQLOutput;
+
+public class Articulo {
+
+	private int cordati;
+	private String denom;
+	private int stock;
+	private float pvp;
+	
+	public Articulo (int cordati, String denom, int stock, float pvp){
+		this.cordati = cordati;
+		this.denom = denom;
+		this.stock = stock;
+		this.pvp = pvp;
+	}
+	
+	public void setCordati(int cordati) {
+		this.cordati = cordati;
+	}
+	
+	public void setDenom(String denom) {
+		this.denom = denom;
+	}
+	
+	public void setPvp(float pvp) {
+		this.pvp = pvp;
+	}
+	
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+	
+	public int getCordati() {
+		return cordati;
+	}
+	
+	public String getDenom() {
+		return denom;
+	}
+	
+	public float getPvp() {
+		return pvp;
+	}
+	
+	public int getStock() {
+		return stock;
+	}
+	
+	public static Articulo newInstance(String cadArticulo){
+		
+		String aux[];
+		cadArticulo = cadArticulo.replaceAll("\"", "");
+		cadArticulo = cadArticulo.replaceAll("\\)", "");
+		cadArticulo = cadArticulo.replaceAll("\\(", "");
+        aux = cadArticulo.split(",");
+
+        return new Articulo(0, "",0,0.0f);
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Articulo{"
+				+ "cordati='"+cordati+"'"
+				+ "denom='"+denom+"'"
+				+ "pvp='"+pvp+"'"
+				+ "stock='"+stock+"'}";
+	}
+}

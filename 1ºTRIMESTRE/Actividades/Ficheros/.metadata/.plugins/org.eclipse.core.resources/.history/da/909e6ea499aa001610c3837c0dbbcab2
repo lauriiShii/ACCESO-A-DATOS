@@ -1,0 +1,70 @@
+package Ejercicio011;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+import com.thoughtworks.xstream.XStream;
+
+/**Dado el XML del ejercicio anterior, utilizando XStream, pásalo a un fichero binario sin 
+serialización de objetos. Compara que sea igual al fichero binario obtenido en el ejercicio 8. Haz la 
+comparación byte a byte.
+**/
+public class Ejercicio011 {
+
+	//VARIABLES
+	private static DataOutputStream escribir;
+	private static DataInputStream leer;
+	
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+
+		//INICIALIZACION
+		escribir = new DataOutputStream(new FileOutputStream("Agenda.dat"));
+		leer = new DataInputStream(new FileInputStream("Agenda.dat"));
+		Contacto id;
+		int cont = 0;
+		
+		try{
+			XStream xstream = new XStream();
+			  xstream.alias("Agenda", ListaPersonas.class);
+			  xstream.alias("Persona", Contacto.class);
+			  xstream.addImplicitCollection(ListaPersonas.class, "lista");
+			  ListaPersonas lista = (ListaPersonas) xstream.fromXML(new FileInputStream("Agenda.xml"));
+			  
+			  List<Contacto> listaContactos = new ArrayList<Contacto>();
+			  listaContactos = lista.getListaPersonas();
+			  
+			  ListIterator<Contacto> iterador = listaContactos.listIterator();
+				
+				while(iterador.hasNext()){
+					id = (Contacto) iterador.next();
+					//agregarSinSerializar((Contacto) listaContactos[cont]);
+					cont++;
+				}
+			  
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		escribir.close();
+		
+	}
+	
+	public static void agregarSinSerializar(Contacto c) throws IOException{
+		escribir.writeUTF(c.nombreCont);
+		escribir.writeUTF(c.telefono);
+		escribir.writeUTF(c.direccion);
+		escribir.writeInt(c.codP);
+		escribir.writeBoolean(c.deboMoney);
+		escribir.writeFloat(c.cantDeb);
+	}
+	
+}

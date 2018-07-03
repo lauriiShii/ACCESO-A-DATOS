@@ -1,0 +1,13 @@
+package BDD;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		//Crear instancias para almacenar en BD
+		
+		Articulo a1 = new Articulo (1,"palo",15, 0);
+
+	}
+
+}

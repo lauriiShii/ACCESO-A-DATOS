@@ -1,0 +1,50 @@
+package ExamenLauraFicheros;
+
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.PrintWriter;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class GestionEmpleados extends DefaultHandler {
+
+	private PrintWriter escribir;
+	private ObjectOutput escribirOb;
+	private Empleado empleado;
+
+	public GestionEmpleados() throws IOException {
+		super();
+
+		escribir = new PrintWriter("EmpleadosBinario.dat");
+	}
+
+	public void startDocument() throws SAXException {
+		System.out.println("Parseando contenido de \"Empleados.xml\" a \"EmpleadosBinario.dat\"");
+	}
+
+	public void endDocument() throws SAXException {
+		System.out.println("fichero \"Empleados.xml\" creado con el contenido de \"EmpleadosBinario.dat\"");
+		escribir.close();
+	}
+
+	public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
+		empleado.nombre = "";
+		empleado.codigo = "";
+		empleado.edad = 0;
+		empleado.salario = 0.0f;
+	}
+
+	public void endElement(String uri, String localName, String name) throws SAXException {
+		if (localName.equals("Empleado"))
+			escribir.println();
+	}
+
+	public void characters(char[] ch, int inicio, int longitud) throws SAXException {
+			try {
+				escribirOb.writeObject(empleado);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+}

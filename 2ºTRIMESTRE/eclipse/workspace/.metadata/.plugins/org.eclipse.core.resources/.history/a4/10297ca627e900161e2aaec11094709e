@@ -1,0 +1,81 @@
+package Examen01;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import datos.Asignatura;
+import datos.Curso;
+import datos.CursoId;
+import datos.Ofertaeducativa;
+import datos.Profesor;
+import datos.Reparto;
+import datos.SessionFactoryUtil;
+
+public class Main {
+
+	//EJERCICIO 01 DEL EXAMEN 
+	 public static void main(String[] args) {
+		 
+		SessionFactory sesionFactory = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionFactory.openSession();
+		String select = "from Profesor p left join p.cursos c left join c.ofertaeducativa";
+		Query cons = sesion.createQuery(select);
+		
+		Iterator<Object[]> it = cons.iterate();
+		Object[] conjunto;
+		
+		Profesor p; 
+		Curso c; 
+		Ofertaeducativa o;
+		Reparto r;
+		
+		boolean primeraVuelta = true;
+		Iterator<Reparto> re = cons.iterate(); 
+		Asignatura a, aux = null; 
+		
+		byte contA = 0, contC = 0, contO = 0; 
+		CursoId idCur, aux2 = null;
+		
+		 byte numAsig;
+		 byte numCursosDist;
+		 byte numOfertasEducativas = 0;
+		
+		while (it.hasNext()){
+			conjunto = (Object[])it.next();
+			p = (Profesor)conjunto[0];
+			c = (Curso)conjunto[1];
+			o = (Ofertaeducativa)conjunto[2];
+			
+			while (it.hasNext()){ 
+				r = re.next();  
+				a = r.getAsignatura(); 
+				
+				aux = a;  
+				idCur = r.getCurso().getId(); 
+				if (!primeraVuelta && !idCur.equals(aux2))  
+					contC++;
+				aux2 = idCur;
+				if (primeraVuelta){
+					contA++;
+					contC++; 
+					contO++;
+					primeraVuelta = false;
+				}
+			}
+			numAsig = contA; // el número de asignaturas diferentes es contA.
+			numCursosDist = contC; // el número de cursos diferentes es contC.
+			numOfertasEducativas = contO; // El numero de ofertas diferentes es contO.
+			
+			if (c != null)
+				System.out.printf("- CodProf: %s | Nombre: %s | Apellidos: %s | Tutor del curso: %s | Tipo educativa: %s | Nombre oferta: %s | Numero de Ofertas: %s | Numero de cursos: %s\n", p.getCodProf(), p.getNombre(), p.getApellidos(), c.getId().getCodCurso(), c.getId().getCodOe(), o.getNombre(), numOfertasEducativas, numCursosDist);
+			else 
+				System.out.printf("- CodProf: %s | Nombre: %s |  Apellidos: %s | Tutor del curso: %s | Tipo educativa: %s | Nombre oferta : %s | Numero de Ofertas: %s | Numero de cursos: %s\n", p.getCodProf(), p.getNombre(), p.getApellidos(), "No es tutor", "---", "---", numOfertasEducativas, numCursosDist);
+		}
+		sesion.close();
+	
+	}
+}

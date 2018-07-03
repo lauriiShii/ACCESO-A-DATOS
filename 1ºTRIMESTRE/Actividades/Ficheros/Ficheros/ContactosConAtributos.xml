@@ -1,0 +1,29 @@
+<Contactos>
+  <Contacto>
+    <nombre>Pipiolo1</nombre>
+    <telefono pais="34">123456789</telefono>
+    <direccion localidad="aeshira">Calle Falsa 123</direccion>
+    <codigoPostal>11200</codigoPostal>
+    <fechaNacimiento>01-01-2001</fechaNacimiento>
+    <leDebo>false</leDebo>
+    <deuda moneda="euro">0.0</deuda>
+  </Contacto>
+  <Contacto>
+    <nombre>Pipiolo2</nombre>
+    <telefono pais="34">223456789</telefono>
+    <direccion localidad="aeshira">Calle Falsa 123</direccion>
+    <codigoPostal>11200</codigoPostal>
+    <fechaNacimiento>01-01-2001</fechaNacimiento>
+    <leDebo>true</leDebo>
+    <deuda moneda="euro">0.0</deuda>
+  </Contacto>
+  <Contacto>
+    <nombre>Pipiolo3</nombre>
+    <telefono pais="34">323456789</telefono>
+    <direccion localidad="aeshira">Calle Falsa 123</direccion>
+    <codigoPostal>11200</codigoPostal>
+    <fechaNacimiento>01-01-2001</fechaNacimiento>
+    <leDebo>false</leDebo>
+    <deuda moneda="euro">0.0</deuda>
+  </Contacto>
+</Contactos>

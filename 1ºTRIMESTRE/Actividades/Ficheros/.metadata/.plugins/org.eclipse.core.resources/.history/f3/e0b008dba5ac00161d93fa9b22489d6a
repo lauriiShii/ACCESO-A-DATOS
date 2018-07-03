@@ -1,0 +1,63 @@
+package ExamenLauraFicheros;
+
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+public class Ejercicio02 {
+	public static void main(String[] args) throws IOException, SAXException, FileNotFoundException {
+
+		XMLReader procesadorXML;
+		GestionEmpleados gestor;
+		InputSource fileXML;
+		ObjectInputStream leer;
+		ObjectOutput escribir;
+		
+		//PROCESAMOS FICHERO FINARIO
+		procesadorXML = XMLReaderFactory.createXMLReader();
+		gestor = new GestionEmpleados();
+		procesadorXML.setContentHandler(gestor);
+		fileXML = new InputSource("Empleados.xml");
+		procesadorXML.parse(fileXML);
+		
+		//MOSTRAMOS FICHERO BINARIO
+		System.out.println("");
+		
+		/*Empleado e1 = new Empleado ("RJ1", "Rafael Jimenez Perez", 40, 1789.45f);
+        Empleado e2 = new Empleado ("PM2", "Paco Marquez Romero", 38, 1900.34f);
+        Empleado e3 = new Empleado ("AG3", "Ana Gonzalez Martin", 45, 1467.23f);
+        Empleado e4 = new Empleado ("TV4", "Tomas Vera Gutierrez", 39, 1780.36f);
+		escribir = new ObjectOutputStream(new FileOutputStream("EmpleadosBinario.dat"));*/
+		leer = new ObjectInputStream(new FileInputStream("EmpleadosBinario.dat"));
+
+		try {
+
+			
+			/*escribir.writeObject(e1);
+			escribir.writeObject(e2);
+			escribir.close();*/
+			while (true)
+				System.out.println(leer.readObject().toString());
+			
+			
+			
+		} catch (EOFException e){
+			
+		} catch (ClassNotFoundException e){
+			
+		}
+		leer.close();
+		
+	}
+		
+}

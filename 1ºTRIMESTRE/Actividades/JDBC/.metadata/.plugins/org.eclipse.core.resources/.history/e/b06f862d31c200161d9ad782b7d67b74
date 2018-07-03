@@ -1,0 +1,45 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Ejercicio07 {
+
+	/**Mostrar todos los datos de los profesores y de los cursos de los que son tutores. Si no son
+tutores, que aparezca “Este profesor no es tutor” en lugar de los datos del curso.**/
+	
+	/** @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+		//ABRIMOS CONEXION
+		//LibreriaJDBC.abrirConexion();
+		
+		//APELLIDOS EN ORDEN ASCENDENTE
+		//LibreriaJDBC.selectEscritaMostrarCincoDatos("SELECT p.*, CodOE, CodCurso FROM profesor p, curso WHERE CodProf = tutor");
+		
+		//FECHA ALTA EN EL SISTEMA EN ORDEN DESCENDENTE
+		//LibreriaJDBC.selectEscritaMostrarCincoDatos("SELECT * FROM profesor WHERE CodProf NOT IN (SELECT tutor FROM curso)");
+		
+		//CERRAMOS CONEXION
+		LibreriaJDBC.cerrarConexion();	
+		
+		final String NO_TUTOR = "[Este profesor no es tutor]";
+        ResultSet result;
+        
+        LibreriaJDBC.abrirConexion();
+        
+        result = LibreriaJDBC.selectEscrito("SELECT * FROM profesor LEFT JOIN curso ON CodProf = Tutor;");
+        try {
+            while (result.next()) {
+                System.out.printf("[CodProf: %s] [Nombre: %s] [Apellidos: %s] [FechaAlta: %s] ", result.getString(1), result.getString(2), result.getString(3), result.getTimestamp(4));
+                if (result.getString(5) == null)
+                    System.out.println(NO_TUTOR);
+                else
+                    System.out.printf("[CodOe: %s] [CodCurso: %s] [Tutor: %s]%n", result.getString(5), result.getString(6), result.getString(7));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        LibreriaJDBC.cerrarConexion();
+
+	}
+
+}

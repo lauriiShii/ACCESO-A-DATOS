@@ -1,0 +1,38 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Ejercicio12 {
+
+	/**Mostrar el horario de un curso. Añadir un asterisco en aquellos tramos horarios donde haya
+desdoble.**/
+	
+	public static void main(String[] args) throws SQLException {
+		
+	  // VARIABLES
+	  final String ASTERISCO = "*";
+	  ResultSet result;
+	
+	  // ABRIMOS CONEXION
+	  LibreriaJDBC.abrirConexion();
+	
+	  //result = LibreriaJDBC.selectEscrito("SELECT * FROM horario where codoe='DAM' and codcurso='1A'");
+	  result = LibreriaJDBC.selectEscrito("select CodAsignatura from horario where codOe = 'DAM' and CodCurso = '1A' and CodAsignatura not in "
+				+ "(select CodAsignatura from horario h1 where CodAsignatura like '@%' and codTramo in (Select CodTramo from horario h2 where h1.codtramo = h2.codtramo))"
+				+ " order by substring(codTramo, 2), substring(codTramo, 1) like 'L%' desc, substring(codTramo, 1) like 'M%' desc, substring(codTramo, 1) like 'X%' desc, "
+				+ "substring(codTramo, 1) like 'J%' desc;");
+	
+	  while (result.next()) {
+	   // SI ES UN TRAMO CON DESDOBLE
+	   if (result.getString(4).matches("@.+"))
+	    System.out.printf(ASTERISCO);
+	   
+	    System.out.printf("%-5s | %-5s | %-5s | %s\n", result.getString(1),
+	      result.getString(2), result.getString(3), result.getString(4));
+	  }
+	
+	  // CERRAMOS CONEXION
+	  LibreriaJDBC.cerrarConexion();
+
+	}
+
+}

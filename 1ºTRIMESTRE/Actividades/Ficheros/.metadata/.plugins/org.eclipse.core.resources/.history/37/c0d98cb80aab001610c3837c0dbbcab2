@@ -1,0 +1,12 @@
+package Ejercicio012;
+
+/**Dado el fichero XML, añádele los siguientes atributos:
+• Prefijo del país en el teléfono
+• Localidad en la dirección
+• Tipo de moneda en el dinero
+Procésalo con SAX y guarda los datos en un fichero de texto. Guarda cada contacto en una línea y
+separa los datos del contacto con un espacio.**/
+
+public class Ejercicio013 {
+
+}

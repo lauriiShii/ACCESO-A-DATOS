@@ -1,0 +1,66 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class ExamenEjercicio02 {
+
+	/** @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+		
+		//VARIABLES
+        ResultSet result;
+        final String NOMBRE = "ASIGNATURAS DEL IES SALADILLO";
+
+        
+        //ABRIMOS CONEXION
+        LibreriaJDBC.abrirConexion();
+        
+        result = LibreriaJDBC.selectEscrito("SELECT a.codAsignatura, a.Nombre, a.HorasSemanales, h.codOe, h.CodCurso, h.CodTramo FROM asignatura a inner join horario h  ON a.CodAsignatura = h.CodAsignatura GROUP BY 1,6;");
+        
+        //CABEZERA
+        ponEstrellas(60);
+        System.out.printf(" %50s \n",NOMBRE);
+        ponEstrellas(60);
+
+
+        while (result.next()) {
+        	// MOSTRAMOS LOS DATOS
+            System.out.printf("Codigo: %s Nombre: %s: Horas semanales: %s%n", result.getString(1), result.getString(2), result.getString(3));
+            
+            //SI NO ES PROFESOR LO INDICAMOS
+            /*if (result.getString(3) == null)
+                System.out.print(NO_TUTOR);
+            
+            if (result.getString(4) == null)
+                System.out.print(NO_TUTOR);
+            
+            if (result.getString(5) == null)
+                System.out.print(NO_TUTOR);
+            */
+            //SI ES PROFESOR MOSTRAMOS LOS DATOS DE LA TABLA CURSO TAMBIEN
+            /*else
+                System.out.printf("[Nombre oferta: %s] [Clave curso: %s-%s]", result.getString(3), result.getString(4), result.getString(5));
+                */
+            
+            //SIEMPRE SE MUESTRA
+            //System.out.printf("[Num asignaturas: %s]%n", result.getString(6));
+        }
+
+        
+        //CERRAMOS CONEXION
+        LibreriaJDBC.cerrarConexion();
+
+	}
+	
+	public static void ponEstrellas (int num){
+        int i;
+        
+        for(i = 0; i <= num; i++){
+        	if(i == num)
+        		System.out.println("*");
+        	else
+        		System.out.print("*");
+        }
+	}
+
+}

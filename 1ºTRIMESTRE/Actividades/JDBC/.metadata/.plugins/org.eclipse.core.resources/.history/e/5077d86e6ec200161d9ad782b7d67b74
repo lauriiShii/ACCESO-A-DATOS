@@ -1,0 +1,70 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ * Created by Alejandro on 05/12/2016.
+ */
+public class Ejercicio12Alejandro {
+    public static void main(String[] args) {
+        int i, j;
+        String aux, ast = "";
+        String[][] horario = new String[5][6];
+        String[] dias = new String[5], horas = new String[6];
+        ResultSet result, dia, hora;
+        //String curso = Teclado.next("¿Qué curso quieres buscar?"), oe = Teclado.next("¿De qué OE quieres buscarlo?");
+        String curso = "1A", oe = "DAM";
+        LibreriaJDBC.abrirConexion();
+        result = LibreriaJDBC.selectEscrito(String.format("SELECT CodAsignatura FROM horario h, tramohorario t WHERE h.CodTramo = t.CodTramo AND CodCurso= '%s' AND CodOe = '%s' ORDER BY dia, t.CodTramo ASC, 1;", curso, oe));
+        dia = LibreriaJDBC.selectEscrito("SELECT DISTINCT dia FROM tramohorario ORDER BY dia;");
+        hora = LibreriaJDBC.selectEscrito("SELECT DISTINCT HoraInicio, HoraFin FROM tramohorario ORDER BY dia, 1, 2;");
+
+        try {
+            for (i = 0; i < horario.length; i++)
+                for (j = 0; j < horario[i].length; j++)
+                    if (result.next()) {
+                        aux = result.getString(1);
+                        if (aux.startsWith("@")) {
+                            ast = "*";
+                            j--;
+                        }
+                        else {
+                            horario[i][j] = aux + ast;
+                            ast = "";
+                        }
+                    }
+
+            i = 0;
+            while (dia.next())
+                dias[i++] = dia.getString(1);
+
+            i = 0;
+            while (hora.next()) {
+                horas[i++] = String.format("%s %s", hora.getString(1), hora.getString(2));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        for (i = 0; i < dias.length; i++) {
+            if (i == 0) {
+                for (j = 0; j < horas[0].length(); j++)
+                    System.out.print(" ");
+                System.out.printf(" %-12s", dias[i]);
+            } else
+                System.out.printf("%-12s", dias[i]);
+        }
+
+        System.out.println();
+
+        for (j = 0; j < 6; j++) {
+            System.out.printf("%-12s ", horas[j]);
+            for (i = 0; i < 5; i++) {
+                System.out.printf("%-12s ", horario[i][j]);
+            }
+            System.out.println();
+        }
+
+        LibreriaJDBC.cerrarConexion();
+    }
+}

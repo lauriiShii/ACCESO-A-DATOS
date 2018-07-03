@@ -1,0 +1,81 @@
+package ObjetosBDD;
+
+public class Venta {
+
+	private int codVenta;
+	private Articulo codArticulo;
+	private Cliente numClie;
+	private int unidadesVendidas;
+	private String fecha;
+	
+	public Venta (int codVenta, Articulo codArticulo, Cliente numClie, int unidadesVendidas, String fecha){
+		this.codVenta = codVenta;
+		this.
+	}
+	
+	public void setCodarti(Articulo codarti) {
+		this.codArticulo = codarti;
+	}
+	
+	public void setCodventa(int codventa) {
+		this.codVenta = codventa;
+	}
+	
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+	
+	public void setNumclie(Cliente numclie) {
+		this.numClie = numclie;
+	}
+	
+	public void setUniven(int univen) {
+		this.unidadesVendidas = univen;
+	}
+	
+	public Articulo getCodarti() {
+		return codArticulo;
+	}
+	
+	public int getCodventa() {
+		return codVenta;
+	}
+	
+	public String getFecha() {
+		return fecha;
+	}
+	
+	public Cliente getNumclie() {
+		return numClie;
+	}
+	
+	public int getUniven() {
+		return unidadesVendidas;
+	}
+	
+    public String getStringTypeT_Venta(){
+        return String.format("('%s', '%s', %s, '%s', %s)", codVenta, codArticulo.getStringTypeT_Articulo(), numClie.getStringTypeT_Cliente(), unidadesVendidas, fecha);
+    }
+    
+	public static Cliente newInstance(String cadArticulo){
+		
+		String aux[];
+		cadArticulo = cadArticulo.replaceAll("\"", "");
+		cadArticulo = cadArticulo.replaceAll("\\)", "");
+		cadArticulo = cadArticulo.replaceAll("\\(", "");
+        aux = cadArticulo.split(",");
+
+        return new Cliente(0, "", "");
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Articulo{"
+				+ "codventa='"+codVenta+"'"
+				+ "codarti='"+codArticulo+"'"
+				+ "numclie='"+numClie+"'"
+				+ "univen='"+unidadesVendidas+"'"
+				+ "fecha='"+fecha+"'}";
+	}
+}

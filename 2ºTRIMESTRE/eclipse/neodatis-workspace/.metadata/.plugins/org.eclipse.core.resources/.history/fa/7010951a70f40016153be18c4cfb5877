@@ -1,0 +1,57 @@
+package BDD;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.Values;
+import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
+
+import ObjetosBDD.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+		ODB odb = ODBFactory.open("neodatis.test");
+		int i =1;
+		
+		Values valoresArticulo = odb.getValues(new ValuesCriteriaQuery(Articulo.class).field("codArticulo")
+				.field("descripcion").field("stock").field("precio"));
+
+		Values valoresCliente = odb.getValues(
+				new ValuesCriteriaQuery(Cliente.class).field("codCliente").field("nombre").field("poblacion"));
+
+		Values valoresVenta = odb.getValues(new ValuesCriteriaQuery(Venta.class).field("codVenta").field("cliente")
+				.field("articulo").field("unidades"));
+
+		Articulo articulo = new Articulo(1, "Salchicha peleona", 25, 0.25f);
+		Cliente cliente = new Cliente(1, "Dabeef", "Arkham Asylum");
+		Venta venta = new Venta(1, cliente, articulo, 20);
+
+		// Almacenamos objetos
+		odb.store(articulo);
+		odb.store(cliente);
+		odb.store(venta);
+
+		// Recuperamos todos los datos
+		Objects<Articulo> articulos = odb.getObjects(Articulo.class);
+		Objects<Cliente> clientes = odb.getObjects(Cliente.class);
+		Objects<Venta> ventas = odb.getObjects(Venta.class);
+		
+		System.out.printf("Articulos: %s\nClientes: %s\nVentas: %s\n", articulos.size() ,clientes.size(), ventas.size());
+		
+		// Visualizar los objetos
+		while (articulos.hasNext())
+			System.out.println(articulos.next().toString());
+		
+		while (clientes.hasNext())
+			System.out.println(clientes.next().toString());
+		
+		while (ventas.hasNext())
+			System.out.println(ventas.next().toString());
+		
+		odb.close();
+		
+		
+
+	}
+
+}

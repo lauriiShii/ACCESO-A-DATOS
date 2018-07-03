@@ -1,0 +1,23 @@
+package Ejercicio012;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class GestionContenido extends DefaultHandler {
+	private PrintWriter escribir;
+	String contenido = "";
+	private final String prefijo = "(Attb.";
+
+	public GestionContenido() throws IOException {
+		super();
+		escribir = new PrintWriter("Ejercicio12.txt");
+	}
+
+	public void startDocument() throws SAXException {
+		System.out.println("Parseando contenido de \"Contactos.xml\" a \"Ejercicio12.txt\"");
+	}
+}

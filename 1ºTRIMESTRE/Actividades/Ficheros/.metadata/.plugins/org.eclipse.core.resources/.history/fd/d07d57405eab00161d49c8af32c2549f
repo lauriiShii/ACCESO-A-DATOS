@@ -1,0 +1,35 @@
+package Ejercicio012;
+
+/**Dado el fichero XML, añádele los siguientes atributos:
+• Prefijo del país en el teléfono
+• Localidad en la dirección
+• Tipo de moneda en el dinero
+Procésalo con SAX y guarda los datos en un fichero de texto. Guarda cada contacto en una línea y
+separa los datos del contacto con un espacio.**/
+
+import java.io.IOException;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+public class Ejercicio012 {
+	public static void main(String[] args) throws IOException, SAXException {
+
+		// VARIABLES Y OBJETOS
+		XMLReader procesadorXML;
+		GestionContenido gestor;
+		InputSource fileXML;
+
+		//PARA ANIADIR EL PREFIJO, LA LOCALIDAD, TIPO DE MONEDA Y SEPARAR 
+		//CADA CONTACTO CON **/ DEBEMOS USAR UN PROCESADOR XML, LOS PROCESADORES DE TEXTO
+		//NECESITAN UN GESTOR QUE DEBEMOS CREAR NOSOTROS.
+		procesadorXML = XMLReaderFactory.createXMLReader();
+		gestor = new GestionContenido();
+		procesadorXML.setContentHandler(gestor);
+		fileXML = new InputSource("ContactosConAtributos.xml");
+		procesadorXML.parse(fileXML);
+
+	}
+}

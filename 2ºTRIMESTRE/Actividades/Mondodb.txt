@@ -1,0 +1,41 @@
+use ejercicio;
+
+//creanis datos de empleados
+Emp1={no:1, nombre:'Juan', dep:10, salario:1000, fechaalta:'10/10/1999'};
+Emp2={no:2, nombre:'Alicia', dep:10, salario:1400, fechaalta:'07/08/2000', oficio:'Profesora'};
+Emp3={no:3, nombre:'María Jesús', dep:20, salario:1500, fechaalta:'05/01/2005', oficio:'Analista', comision:100};
+Emp4={no:4, nombre:'Alberto', dep:20, salario:1100, fechaalta:'15/11/2001'};
+Emp5={no:5, nombre:'Fernando', dep:30, salario:1400, fechaalta:'20/11/1999', comision:200, oficio:'Analista'};
+
+//guardamos los datos
+db.empleados.save(Emp1);
+db.empleados.save(Emp2);
+db.empleados.save(Emp3);
+db.empleados.save(Emp4);
+db.empleados.save(Emp5);
+
+//Mostramos datos
+db.empleados.find({dep:{$eq:10}});
+db.empleados.find({dep:{$in:[10,20]}});
+db.empleados.find({salario: {$gt:1300}}, {oficio:{$eq:'Profesora'}});
+
+//actualizamos datos
+db.empleados.update({oficio:'Analista'},{$inc:{salario:100}}, {multi: true});
+db.empleados.update({comision:{$exists:true}}, {$inc:{comision:-10}}, {multi: true});
+
+
+
+
+use ejercicio2;
+
+//insert de libros
+db.libros.insert({codigo:1,nombre:'Acceso a datos', pvp:35, editorial:'Garceta', temas:['Base de datos', 'Hibernate', 'Neodatis']});
+db.libros.insert({codigo:2,nombre:'Entornos de desarrollo', pvp:27, editorial:'Garceta', temas:['UML', 'Subversión', 'ERMaster']});
+db.libros.insert({codigo:3,nombre:'Programacion de Servicios', pvp:25, editorial:'Garceta', temas:['SOCKET', 'Multihilo']});
+
+//Mostramos datos
+db.libros.find(editorial:'Garceta', pvp:{$gte:20, $lte:25}, temas:{$in:['SOCKET']});
+
+//actualizamos datos
+db.libros.update({temas: {$nin:['SOCKET']}}, {$push:{temas: 'SOCKET'}}, {multi: true});
+db.libros.update({editorial:'Garceta'}, {$inc:{pvp:-5}}, {multi: true});

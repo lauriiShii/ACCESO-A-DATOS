@@ -1,0 +1,3 @@
+nombre: Pipiolo1, telefono: (Attb.pais: 34) 123456789, direccion: (Attb.localidad: aeshira) CalleFalsa123, codigoPostal: 11200, fechaNacimiento: 01-01-2001, leDebo: false, deuda: (Attb.moneda: euro) 0.0, 
+nombre: Pipiolo2, telefono: (Attb.pais: 34) 223456789, direccion: (Attb.localidad: aeshira) CalleFalsa123, codigoPostal: 11200, fechaNacimiento: 01-01-2001, leDebo: true, deuda: (Attb.moneda: euro) 0.0, 
+nombre: Pipiolo3, telefono: (Attb.pais: 34) 323456789, direccion: (Attb.localidad: aeshira) CalleFalsa123, codigoPostal: 11200, fechaNacimiento: 01-01-2001, leDebo: false, deuda: (Attb.moneda: euro) 0.0, 

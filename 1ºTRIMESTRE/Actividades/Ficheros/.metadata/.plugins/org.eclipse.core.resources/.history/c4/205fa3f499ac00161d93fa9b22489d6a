@@ -1,0 +1,43 @@
+package ExamenLauraFicheros;
+
+import java.io.*;
+
+import com.thoughtworks.xstream.XStream;
+
+public class Ejercicio01 {
+
+    public static void main(String[] args) throws IOException {
+
+    	//DECLARAMOS VARIABLES Y OBJETOS
+        File fichero = new File("binarioNoSerializable.dat");
+        ListaEmpleado lista = new ListaEmpleado();
+        FileInputStream fileIn;
+        DataInputStream lectorEmpleado;
+        Empleado empleado;
+        XStream xstream = new XStream();
+
+        fileIn = new FileInputStream(fichero);
+        lectorEmpleado = new DataInputStream(fileIn);
+
+        try {
+            while (true) {
+            	empleado = new Empleado (lectorEmpleado.readUTF(), lectorEmpleado.readUTF(),lectorEmpleado.readInt(), lectorEmpleado.readFloat());
+                lista.agregarEmpleado(empleado);
+            }
+
+        } catch (EOFException e) {
+
+        }
+        
+        lectorEmpleado.close();
+
+        xstream.alias("Contactos", ListaEmpleado.class);
+        xstream.alias("Contacto", Empleado.class);
+        xstream.addImplicitCollection(ListaEmpleado.class, "lista");
+        xstream.toXML(lista, new FileOutputStream("ContactosNoSerializable.xml"));
+
+        fileIn.close();
+
+    }
+
+}

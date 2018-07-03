@@ -1,0 +1,57 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Ejercicio12Alejandro {
+	
+    public static void main(String[] args) throws SQLException {
+        int aux = -1;
+        int i, j;
+        String[][] horario = new String[5][6];
+        String[] dias = new String[5], horas = new String[6];
+        ResultSet result, dia, hora;
+
+        String curso = "1A", oe = "DAM";
+        LibreriaJDBC.abrirConexion();
+        result = LibreriaJDBC.selectEscrito(String.format("SELECT CodAsignatura FROM horario h, tramohorario t WHERE h.CodTramo = t.CodTramo AND CodCurso= '%s' AND CodOe = '%s' ORDER BY dia, t.CodTramo ASC", curso, oe));
+        dia = LibreriaJDBC.selectEscrito("SELECT DISTINCT dia FROM tramohorario ORDER BY dia");
+        hora = LibreriaJDBC.selectEscrito("SELECT DISTINCT HoraInicio, HoraFin FROM tramohorario ORDER BY dia");
+
+        for (i = 0; i < horario.length; i++)
+            for (j = 0; j < horario[i].length; j++)
+                if (result.next())
+                    horario[i][j] = result.getString(1);
+
+        i = 0;
+        while (dia.next())
+            dias[i++] = dia.getString(1);
+
+        i = 0;
+        while (hora.next()) {
+            horas[i++] = String.format("%s %s", hora.getString(1), hora.getString(2));
+
+        for (i = 0; i < dias.length; i++) {
+            if (i == 0) {
+                for (j = 0; j < horas[0].length(); j++)
+                    System.out.print(" ");
+                System.out.printf(" %-12s", dias[i]);
+            }
+            else
+                System.out.printf("%-12s", dias[i]);
+        }
+
+        System.out.println();
+
+        for (j = 0; j < 6; j++) {
+            for (i = 0; i < 5; i++) {
+                if (i == 0)
+                    System.out.printf("%-12s ",horas[i]);
+                System.out.printf("%-12s ", horario[i][j]);
+            }
+            System.out.println();
+        }
+
+        LibreriaJDBC.cerrarConexion();
+        result.close();
+        }
+    }
+}

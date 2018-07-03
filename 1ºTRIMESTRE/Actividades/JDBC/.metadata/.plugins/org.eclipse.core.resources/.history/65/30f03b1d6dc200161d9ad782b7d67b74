@@ -1,0 +1,16 @@
+import java.sql.SQLException;
+
+public class resetBDD {
+	public static void main(String[] args) throws SQLException {
+
+		// ABRIMOS CONEXION
+		LibreriaJDBC.abrirConexion();
+
+		LibreriaJDBC.ejecutarScriptCreacion();
+
+		// CERRAMOS CONEXION
+		LibreriaJDBC.cerrarConexion();
+
+	}
+
+}

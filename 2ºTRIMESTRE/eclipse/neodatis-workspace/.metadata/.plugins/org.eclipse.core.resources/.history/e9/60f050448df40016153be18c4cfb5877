@@ -1,0 +1,77 @@
+package Ejercicios;
+
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+
+import ObjetosBDD.*;
+
+public class Ejercicios {
+	
+	//Metodo que visualice los datos de cada venta
+	public static void dameVentas (){
+		
+		ODB odb = ODBFactory.open("VENTAS.dat");
+
+		  Objects<Venta> ventas = odb.getObjects(Venta.class);
+
+		  System.out.printf(
+		    "%s%15s%15s%13s%18s%35s%24s%11s\n", "CODVENTA", "CODARTIC", "DESCRIP", "NUMCLI", "NOMBRE", "FECHA", "UNIDSDES", "IMPORTE");
+		  Venta venta;
+
+		  while (ventas.hasNext()) {
+		   venta = ventas.next();
+		   System.out.printf("%4s%15s%20s%10s%30s%30s%15s%15s\n", venta.getCodVenta(),
+		     venta.getArticulo().getCodArticulo(), venta.getArticulo().getDescripcion(),
+		     venta.getCliente().getCodCliente(), venta.getCliente().getNombre(), venta.dameFecha(),
+		     venta.getUnidades(), venta.getArticulo().getPrecio() * venta.getUnidades());
+		  }
+
+		  odb.close();
+	}
+	
+	public static void datosVentas(){
+		ODB odb = ODBFactory.open("VENTAS.dat");
+
+		  Objects<Articulo> articulos = odb.getObjects(Articulo.class);
+		  Objects<Venta> ventas = odb.getObjects(Venta.class);
+
+		  System.out.printf("%15s%30s%15s%15s%15s%15s%15s\n", "CODARTIC", "DESCRIP", "STOCK", "PRECIO", "SUMA VEND",
+		    "SUMA IMP", "SUMA VENT");
+
+		  Articulo articulo;
+
+		  Venta venta;
+
+		  int sumaVend = 0, sumaVent = 0;
+		  float sumaImp = 0;
+
+		  while (articulos.hasNext()) {
+
+		   articulo = articulos.next();
+
+		   while (ventas.hasNext()) {
+
+		    venta = ventas.next();
+
+		    if (venta.getArticulo().getCodArticulo() == articulo.getCodArticulo()) {
+		     sumaVend += venta.getUnidades();
+		     sumaVent++;
+		     sumaImp += venta.getUnidades() * articulo.getPrecio();
+		    }
+
+		   }
+
+		   System.out.printf("%15s%30s%15s%15s%15d%15d%15f\n", articulo.getCodArticulo(), articulo.getDescripcion(),
+		     articulo.getStock(), articulo.getPrecio(), sumaVend, sumaVent, sumaImp);
+
+		   sumaVend = 0;
+		   sumaVent = 0;
+		   sumaImp = 0;
+		   ventas = odb.getObjects(Venta.class);
+		  }
+
+		  odb.close();
+	}
+
+}

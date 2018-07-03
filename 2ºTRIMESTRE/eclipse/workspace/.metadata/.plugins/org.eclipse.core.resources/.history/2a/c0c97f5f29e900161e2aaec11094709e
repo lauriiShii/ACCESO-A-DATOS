@@ -1,0 +1,52 @@
+package Examen01;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import datos.Curso;
+import datos.Ofertaeducativa;
+import datos.Profesor;
+import datos.Reparto;
+import datos.SessionFactoryUtil;
+
+public class Main {
+
+	//EJERCICIO 01 DEL EXAMEN 
+	 public static void main(String[] args) {
+		 
+		SessionFactory sesionFactory = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionFactory.openSession();
+		String select = "from Profesor p join p.reparto join p.cursos c left join c.ofertaeducativa";
+		Query cons = sesion.createQuery(select);
+		
+		Iterator<Object[]> it = cons.iterate();
+		Object[] conjunto;
+		
+		Profesor p; 
+		Curso c; 
+		Ofertaeducativa o;
+		
+		boolean primeraVuelta = true;
+		int numOfertas = 0;
+		int numCursos = 0;
+		int numAsig = 0;
+		
+		while (it.hasNext()){
+			conjunto = (Object[])it.next();
+			p = (Profesor)conjunto[0];
+			c = (Curso)conjunto[1];
+			o = (Ofertaeducativa)conjunto[2];
+			
+			if (c != null)
+				System.out.printf("- CodProf: %s | Nombre: %s | Apellidos: %s | Tutor del curso: %s | Tipo educativa: %s | Nombre oferta: %s | Numero de Ofertas: %s | Numero de cursos: %s  | Numero de asignaturas: %s\n", p.getCodProf(), p.getNombre(), p.getApellidos(), c.getId().getCodCurso(), c.getId().getCodOe(), o.getNombre(), numOfertas, numCursos, numAsig);
+			else 
+				System.out.printf("- CodProf: %s | Nombre: %s |  Apellidos: %s | Tutor del curso: %s | Tipo educativa: %s | Nombre oferta : %s | Numero de Ofertas: %s | Numero de cursos: %s | Numero de asignaturas: %s\n", p.getCodProf(), p.getNombre(), p.getApellidos(), "No es tutor", "---", "---", numOfertas, numCursos, numAsig);
+		}
+		sesion.close();
+	
+	}
+}

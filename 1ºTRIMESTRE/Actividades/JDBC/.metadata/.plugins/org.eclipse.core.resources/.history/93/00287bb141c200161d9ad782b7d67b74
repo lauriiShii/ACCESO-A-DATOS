@@ -1,0 +1,11 @@
+
+public class Ejercicio10 {
+
+	/**Mostrar cuándo se imparte una asignatura en un curso concreto.**/
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

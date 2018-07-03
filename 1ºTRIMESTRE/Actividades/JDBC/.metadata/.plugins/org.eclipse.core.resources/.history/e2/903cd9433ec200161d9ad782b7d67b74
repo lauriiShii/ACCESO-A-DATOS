@@ -1,0 +1,21 @@
+import java.sql.SQLException;
+
+public class Ejercicio09 {
+
+	/**Mostrar de todos los cursos el nombre de la oferta educativa, la clave primaria del curso y el
+nombre del tutor.
+
+	 * @throws SQLException **/
+	
+	public static void main(String[] args) throws SQLException {
+        
+        //ABRIR CONEXION
+        LibreriaJDBC.abrirConexion();
+
+        LibreriaJDBC.selectEscritaMostrarCuatroDatos("select o.nombre,c.codOe, Codcurso, p.nombre from ofertaEducativa o, curso c, profesor p where p.CodProf = tutor and o.codOe = c.codOe");
+		
+        //CERRAR CONEXION
+        LibreriaJDBC.cerrarConexion();
+	}
+
+}

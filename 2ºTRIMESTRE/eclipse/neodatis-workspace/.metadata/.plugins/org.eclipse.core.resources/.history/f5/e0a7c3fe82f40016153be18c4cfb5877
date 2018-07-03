@@ -1,0 +1,33 @@
+package Ejercicios;
+
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+
+import ObjetosBDD.*;
+
+public class Ejercicios {
+	
+	//Metodo que visualice los datos de cada venta
+	public static void dameVentas (){
+		
+		ODB odb = ODBFactory.open("VENTAS.dat");
+
+		  Objects<Venta> ventas = odb.getObjects(Venta.class);
+
+		  System.out.printf(
+		    "%s%15s%30s%15s%20s%30s%15s%15s\n", "CODVENTA", "CODARTIC", "DESCRIP", "NUMCLI", "NOMBRE", "FECHA", "UNIDSDES", "IMPORTE");
+		  Venta venta;
+
+		  while (ventas.hasNext()) {
+		   venta = ventas.next();
+		   System.out.printf("%4s%15s%-15s%10s%30s%30s%15s%15s\n", venta.getCodVenta(),
+		     venta.getArticulo().getCodArticulo(), venta.getArticulo().getDescripcion(),
+		     venta.getCliente().getCodCliente(), venta.getCliente().getNombre(), venta.dameFecha(),
+		     venta.getUnidades(), venta.getArticulo().getPrecio() * venta.getUnidades());
+		  }
+
+		  odb.close();
+	}
+
+}

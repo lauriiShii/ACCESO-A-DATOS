@@ -1,0 +1,65 @@
+[
+  {
+    "nombreCont": "Pepe",
+	"telefono": "856856888",
+    "direccion": "rosales",
+	"codP": 11300,
+	"fechadeNacimiento": "12/07/1995",
+    "deboMoney": true,
+    "cantDeb": 10.2
+  },
+  {
+    "nombreCont": "Susana",
+	"telefono": "956956956",
+    "direccion": "rosales",
+	"codP": 11306,
+	"fechadeNacimiento": "12/07/1994",
+    "deboMoney": false,
+    "cantDeb": 1.1
+  },
+  {
+    "nombreCont": "Susana",
+	"telefono": "956956956",
+    "direccion": "rosales",
+	"codP": 11306,
+	"fechadeNacimiento": "12/07/1994",
+    "deboMoney": false,
+    "cantDeb": 1.1
+  },
+  {
+    "nombreCont": "Rosa",
+	"telefono": "956956956",
+    "direccion": "rosales",
+	"codP": 11306,
+	"fechadeNacimiento": "12/07/1994",
+    "deboMoney": false,
+    "cantDeb": 1.1
+  },
+  {
+    "nombreCont": "Eva",
+	"telefono": "956956956",
+    "direccion": "rosales",
+	"codP": 11306,
+	"fechadeNacimiento": "12/07/1994",
+    "deboMoney": false,
+    "cantDeb": 1.1
+  },
+  {
+    "nombreCont": "Pedro",
+	"telefono": "956956956",
+    "direccion": "rosales",
+	"codP": 11306,
+	"fechadeNacimiento": "12/07/1994",
+    "deboMoney": false,
+    "cantDeb": 1.1
+  },
+  {
+    "nombreCont": "Ana",
+	"telefono": "956956956",
+    "direccion": "rosales",
+	"codP": 11306,
+	"fechadeNacimiento": "12/07/1994",
+    "deboMoney": false,
+    "cantDeb": 1.1
+  }
+]

@@ -1,0 +1,61 @@
+package ObjetosBDD;
+
+public class Cliente {
+	private int codClie;
+	private String nombre;
+	private String pobla;
+	
+	public Cliente (int numclie, String nombre, String pobla){
+		this.codClie = numclie;
+		this.nombre = nombre;
+		this.pobla = pobla;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public void setNumclie(int numclie) {
+		this.codClie = numclie;
+	}
+	
+	public void setPobla(String pobla) {
+		this.pobla = pobla;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public String getPobla() {
+		return pobla;
+	}
+	
+	public int getNumclie() {
+		return codClie;
+	}
+	
+    public String getStringTypeT_Cliente(){
+        return String.format("('%s', '%s', %s)", codClie, nombre, pobla);
+    }
+    
+	public static Cliente newInstance(String cadArticulo){
+		
+		String aux[];
+		cadArticulo = cadArticulo.replaceAll("\"", "");
+		cadArticulo = cadArticulo.replaceAll("\\)", "");
+		cadArticulo = cadArticulo.replaceAll("\\(", "");
+        aux = cadArticulo.split(",");
+
+        return new Cliente(0, "", "");
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Articulo{"
+				+ "numclie='"+codClie+"'"
+				+ "nombre='"+nombre+"'"
+				+ "pobla='"+pobla+"'}";
+	}
+}
